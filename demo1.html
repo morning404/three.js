@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>three.js----demo1</title>
+</head>
+<body>
+    <!-- hello  three.js -->
+    <div id="box"></div>
+</body>
+<script type="module">
+// import * as THREE from "../js/Three/Three.js"
+// step 1
+import {
+    Scene, //场景
+    PerspectiveCamera, //相机
+    WebGLRenderer, // 渲染器
+
+
+    BoxGeometry,
+    MeshBasicMaterial,
+    Mesh
+} from "./js/Three.js"
+
+/**
+ * step 2
+ * 场景对象
+ * 场景是一个容器，主要用于保存、跟踪索要渲染的物体和使用的光源
+ * 如果没有场景就无法渲染任何物体
+*/
+const scene = new Scene()
+/**
+ * step 3
+ * 透视相机
+ * 摄像机决定了能在场景中看到什么
+ * 我们基于摄像机的角度来计算场景对象在浏览器中会渲染成什么样子
+ * PerspectiveCamera
+ * 
+ * 第一个参数： 视野角度（FOV）
+ *       视野角度就是在无论什么时候，你所能在显示器上看到的场景的范围，单位是角度（与弧度区分）
+ * 第二个参数：宽高比
+ * 第三个参数：近截面（near）
+ * 第四个参数：远截面（far）
+ * 
+*/
+const camera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)
+
+/**
+ * step 4
+ * 创建一个立方几何体
+ * 添加材质
+ * 组合立方体和材质 创建出一个新的网格对象
+ * 将立方体网格追加到场景中
+ * 设置摄像机在Z轴的上的距离  （也就是屏幕上的距离）
+ * 
+*/
+const geometry = new BoxGeometry()
+const material = new MeshBasicMaterial({color: 0x002299})
+
+const cube = new Mesh(geometry, material)
+scene.add(cube)
+camera.position.z = 5
+
+/**
+ * step 5
+ * 创建渲染器
+ * 设置渲染器的大小
+ * 将渲染器调价到 div中
+*/
+const renderer = new WebGLRenderer()
+renderer.setSize(window.innerWidth, window.innerHeight)
+document.getElementById('box').appendChild(renderer.domElement)
+
+/**
+ * step 6
+ * 通过修改cube的rotation 的属性，改变立方体的角度，最后不停刷新画布做出动画效果
+ * 
+*/
+function animate(){
+    requestAnimationFrame(animate)
+    cube.position.x += 0.01;
+    cube.position.y += 0.01;
+    renderer.render(scene, camera)
+}
+animate()
+</script>
+</html>
